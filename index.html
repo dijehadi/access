@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html>
     <head>
-<!--        <script id="facebook-jssdk" src="//connect.facebook.net/en_US/sdk.js#xfbml=1&amp;version=v2.0"></script>-->
-        <meta property="fb:app_id" content="1606710216223258">
-        <meta property="fb:admins" content="555372963">
+        <title>Denah Lokasi</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+        <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+        <style>
+            html, body {height: 100%;overflow: hidden;}
+            #map {height: 80%;}
+        </style>
     </head>
     <body>
-        <div id="fb-root"></div>
+        <div id="map"></div>
         <script>
-            (function(d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                js = d.createElement(s); js.id = id;
-                js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=1606710216223258&version=v2.0";
-                fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
+            var map = L.map('map').setView([-6.2010576,106.8068897], 16);
+            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            L.tileLayer('http://census.sparkgeo.com/{z}/{x}/{y}.png').addTo(map);
+            L.marker([-6.2010576,106.8068897]).addTo(map).bindPopup("Gedung Graha Makarti Bhakti Nagari Kampus LAN").openPopup();
         </script>
-        <div class="fb-comments" data-href="http://dije-hadi.com/access/" data-numposts="5" data-colorscheme="light"></div>
     </body>
 </html>
