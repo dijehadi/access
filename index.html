@@ -4,11 +4,12 @@
         <title>Denah Lokasi</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-        <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+        <link rel="stylesheet" href="leaflet/leaflet.css" />
+        <script src="leaflet/leaflet.js"></script>
         <style>
             html, body {height: 100%;overflow: hidden;}
             #map {height: 90%;}
+            .title {text-align: center;}
         </style>
     </head>
     <body>
@@ -21,18 +22,30 @@
             }).addTo(map);
             L.tileLayer('http://census.sparkgeo.com/{z}/{x}/{y}.png').addTo(map);
             
-            var locSpbuPertamina = L.marker([-6.2023846, 106.806344]).addTo(map).bindPopup("SPBU Pertamina"),
-                locJdc = L.marker([-6.20167, 106.80093]).addTo(map).bindPopup("Jakarta Design Center (JDC)"),
+            var locSpbuPertamina = L.marker([-6.2023846, 106.806344]).addTo(map).bindPopup('<p class="title">SPBU Pertamina</p>' +
+                                                                                          '<iframe width="780" height="480" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="loc_spbu_pertamina.html"></iframe>',
+                                                                                           {autopan: true, maxWidth: 800, maxHeight: 520}),
+                locJdc = L.marker([-6.20167, 106.80093]).addTo(map).bindPopup('<p class="title">Jakarta Design Center (JDC)</p>' +
+                                                                             '<iframe width="780" height="480" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="loc_jdc.html"></iframe>',
+                                                                              {autopan: true, maxWidth: 800, maxHeight: 520}),
                 locGedungMpr = L.marker([-6.21049, 106.80009]).addTo(map).bindPopup("Gedung MPR/DPR"),
-                locGedungBri = L.marker([-6.21703, 106.81453]).addTo(map).bindPopup("Gedung BRI"),
+                locGedungBri = L.marker([-6.21703, 106.81453]).addTo(map).bindPopup('<p class="title">Gedung BRI</p>' +
+                                                                                   '<iframe width="780" height="480" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="loc_gedung_bri.html"></iframe>',
+                                                                                   {autopan: true, maxWidth: 800, maxHeight: 520}),
                 locRsAl = L.marker([-6.21100, 106.81116]).addTo(map).bindPopup("Rumah Sakit AL Mintohardjo"),
                 locWismaDharmala = L.marker([-6.21445, 106.81760]).addTo(map).bindPopup("Wisma Dharmala"),
                 locTpuKaret = L.marker([-6.20289, 106.81410]).addTo(map).bindPopup("TPU Karet Bivak"),
-                locHotelLeMeridien = L.marker([-6.21316, 106.81887]).addTo(map).bindPopup("Hotel Le Meridien"),
+                locHotelLeMeridien = L.marker([-6.21316, 106.81887]).addTo(map).bindPopup('<p class="title">Hotel Le Meridien</p>' +
+                                                                                         '<iframe width="780" height="480" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="loc_hotel_le_meridien.html"></iframe>',
+                                                                                          {autopan: true, maxWidth: 800, maxHeight: 520}),
                 locGedungLAN = L.marker([-6.20070, 106.80658]).addTo(map).bindPopup("Gedung Graha Makarti Bhakti Nagari Kampus LAN"),
                 locPam = L.marker([-6.2011606, 106.8127498]).addTo(map).bindPopup("Perusahaan Air Minum (PAM) Perusahaan Daerah"),
-                locTheSultanHotel = L.marker([-6.2181435, 106.809955]).addTo(map).bindPopup("The Sultan Hotel"),
-                locKantorPajak = L.marker([-6.20213, 106.80681]).addTo(map).bindPopup("Kantor Pajak Tanah Abang"),
+                locTheSultanHotel = L.marker([-6.2181435, 106.809955]).addTo(map).bindPopup('<p class="title">The Sultan Hotel</p>' +
+                                                                                           '<iframe width="780" height="480" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="loc_sultan_hotel.html"></iframe>',
+                                                                                            {autopan: true, maxWidth: 800, maxHeight: 520}),
+                locKantorPajak = L.marker([-6.20213, 106.80681]).addTo(map).bindPopup('<p class="title">Kantor Pajak Tanah Abang</p>' +
+                                                                                      '<iframe width="780" height="480" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="loc_kantor_pajak.html"></iframe>',
+                                                                                      {autopan: true, maxWidth: 800, maxHeight: 520}),
                 circle = L.circle([-6.20070, 106.80658], 50, {
                     color: 'OrangeRed',
                     fillColor: 'OrangeRed',

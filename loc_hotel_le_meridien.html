@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Hotel Le Meridien</title>
+        <style>
+            html, body, #map-canvas {
+                height: 100%;
+                margin: 0px;
+                padding: 0px
+            }
+        </style>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+        <script>
+            function initialize(locLat, locLng, locHeading) {
+                var locGoal = new google.maps.LatLng(-6.20070, 106.80658);
+                var loc = new google.maps.LatLng(locLat, locLng);
+                var mapOptions = {
+                    center: loc,
+                    zoom: 16
+                };
+                var map = new google.maps.Map(
+                    document.getElementById('map-canvas'), mapOptions);
+                var goalMarker = new google.maps.Marker({
+                    position: locGoal,
+                    map: map,
+                    title: 'Gedung Graha Makarti Bhakti Nagari Kampus LAN'
+                });
+                var infoWindow = new google.maps.InfoWindow({
+                    content: goalMarker.title
+                });
+                google.maps.event.addListener(goalMarker, 'click', function() {
+                    infoWindow.open(map, goalMarker);
+                });
+                var panoramaOptions = {
+                    position: loc,
+                    pov: {
+                        heading: locHeading,
+                        pitch: 0
+                    },
+                    zoom: 0
+                };
+                var myPano = new google.maps.StreetViewPanorama(
+                    document.getElementById('pano'),
+                    panoramaOptions);
+                map.setStreetView(myPano);
+            }
+            google.maps.event.addDomListener(window, 'load', function () {
+                initialize(-6.2139198,106.8191454,293.62);
+            });
+        </script>
+    </head>
+    <body>
+        <div id="map-canvas" style="height:100%;width:30%;margin:0px;padding:0px;float:left"></div>
+        <div id="pano" style="position:relative;width:70%;height:100%;margin:0px;padding:0px;float:left"></div>
+    </body>
+</html>
