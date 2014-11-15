@@ -29,7 +29,9 @@
                 var infoWindow = new google.maps.InfoWindow({
                     content: goalMarker.title
                 });
-                infoWindow.open(map, goalMarker);
+                google.maps.event.addListener(goalMarker, 'click', function() {
+                    infoWindow.open(map, goalMarker);
+                });
                 var panoramaOptions = {
                     position: loc,
                     pov: {
