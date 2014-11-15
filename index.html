@@ -8,18 +8,40 @@
         <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
         <style>
             html, body {height: 100%;overflow: hidden;}
-            #map {height: 80%;}
+            #map {height: 90%;}
         </style>
     </head>
     <body>
         <div id="map"></div>
         <script>
-            var map = L.map('map').setView([-6.2010576,106.8068897], 16);
+            // init map
+            var map = L.map('map').setView([-6.2010576,106.8068897], 15);
             L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map);
             L.tileLayer('http://census.sparkgeo.com/{z}/{x}/{y}.png').addTo(map);
-            L.marker([-6.2010576,106.8068897]).addTo(map).bindPopup("Gedung Graha Makarti Bhakti Nagari Kampus LAN").openPopup();
+            
+            var locSpbuPertamina = L.marker([-6.2023846, 106.806344]).addTo(map).bindPopup("SPBU Pertamina"),
+                locJdc = L.marker([-6.20167, 106.80093]).addTo(map).bindPopup("Jakarta Design Center (JDC)"),
+                locGedungMpr = L.marker([-6.21049, 106.80009]).addTo(map).bindPopup("Gedung MPR/DPR"),
+                locGedungBri = L.marker([-6.21703, 106.81453]).addTo(map).bindPopup("Gedung BRI"),
+                locRsAl = L.marker([-6.21100, 106.81116]).addTo(map).bindPopup("Rumah Sakit AL Mintohardjo"),
+                locWismaDharmala = L.marker([-6.21445, 106.81760]).addTo(map).bindPopup("Wisma Dharmala"),
+                locTpuKaret = L.marker([-6.20289, 106.81410]).addTo(map).bindPopup("TPU Karet Bivak"),
+                locHotelLeMeridien = L.marker([-6.21316, 106.81887]).addTo(map).bindPopup("Hotel Le Meridien"),
+                locGedungLAN = L.marker([-6.20070, 106.80658]).addTo(map).bindPopup("Gedung Graha Makarti Bhakti Nagari Kampus LAN"),
+                locPam = L.marker([-6.2011606, 106.8127498]).addTo(map).bindPopup("Perusahaan Air Minum (PAM) Perusahaan Daerah"),
+                locTheSultanHotel = L.marker([-6.2181435, 106.809955]).addTo(map).bindPopup("The Sultan Hotel"),
+                circle = L.circle([-6.20070, 106.80658], 50, {
+                    color: 'OrangeRed',
+                    fillColor: 'OrangeRed',
+                    fillOpacity: 0.3
+                }).addTo(map);
+            
+//            L.marker([-6.203627,106.807811]).addTo(map).bindPopup("PAM Jaya");
+//            L.marker([-6.2027213,106.807536]).addTo(map).bindPopup("Kantor Pajak Tanah Abang");
+            
+            locGedungLAN.openPopup();
         </script>
     </body>
 </html>
