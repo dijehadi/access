@@ -4,15 +4,118 @@
         <title>Denah Lokasi</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/style.css" />
         <link rel="stylesheet" href="leaflet/leaflet.css" />
+        <link rel="stylesheet" href="//code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
+        <link rel="stylesheet" href="//watson.lennardvoogdt.nl/Leaflet.awesome-markers/dist/leaflet.awesome-markers.css">
         <script src="leaflet/leaflet.js"></script>
+        <script src="//watson.lennardvoogdt.nl/Leaflet.awesome-markers/dist/leaflet.awesome-markers.js"></script>
         <style>
-            html, body {height: 100%;overflow: hidden;}
-            #map {height: 90%;}
+            html, body {height: 100%;overflow: scroll; overflow-x: hidden; background-color: #d3f7fb;font-family: 'Raleway', Arial, sans-serif;font-weight: 400;
+font-size: 1em;}
+            #map {height: 70%;width: 80%;margin: 0 auto;}
             .title {text-align: center;}
+            .container {width: 80%;margin: 0 auto 1em auto;}
+            h1 {margin: 0;font-weight: 700;line-height: 1.3;text-align: center;}
         </style>
     </head>
     <body>
+        <div class="container">
+            <header>
+                <h1>Akses Lokasi</h1>                
+            </header>
+            <section>
+                <select id="akses" class="cs-select cs-skin-underline">
+                    <option value="" disabled selected>Pilih kendaraan</option>
+                    <option value="kendaraan-1">Via Kendaraan Pribadi</option>
+                    <option value="kendaraan-2">Via Angkutan Umum</option>
+                </select>
+                <select id="jalur-pribadi" class="cs-select cs-skin-underline hidden">
+                    <option value="" disabled selected>Pilih jalur</option>
+                    <option value="1">Dari Cawang</option>
+                    <option value="2">Dari Cempaka Putih</option>
+                    <option value="3">Dari Grogol</option>
+                    <option value="4">Dari Monas</option>
+                </select>
+                <select id="jalur-umum" class="cs-select cs-skin-underline hidden">
+                    <option value="" disabled selected>Pilih tempat pemberangkatan</option>
+                    <option value="101">Dari Bandara Soekarno-Hatta</option>
+                    <option value="102">Dari Stasiun Gambir</option>
+                    <option value="103">Dari Stasiun Jatinegara</option>
+                    <option value="104">Dari Stasiun Pasar Senen</option>
+                    <option value="105">Dari Stasiun Tanah Abang</option>
+                    <option value="106">Dari Terminal Kalideres</option>
+                    <option value="107">Dari Terminal Kampung Rambutan</option>
+                    <option value="108">Dari Terminal Lebak Bulus</option>
+                    <option value="109">Dari Terminal Pulo Gadung</option>
+                    <option value="110">Dari Terminal Rawamangun</option>
+                    <option value="111">Dari Terminal Tanjung Priok</option>
+                    <option value="112">Dari Bandung</option>
+                    <option value="113">Dari Bekasi</option>
+                    <option value="114">Dari Bogor/Depok</option>
+                    <option value="115">Dari Cibinong</option>
+                    <option value="116">Dari Cikarang</option>
+                    <option value="117">Dari Cileungsi</option>
+                    <option value="118">Dari Ciputat</option>
+                    <option value="119">Dari Serpong</option>
+                    <option value="120">Dari Tangerang</option>
+                </select>
+            </section>
+            <section id="petunjuk-detil">
+                <p>
+                    Silahkan pilih cara akses ke lokasi.
+                </p>
+            </section>
+        </div>
+        <script src="js/classie.js"></script>
+        <script src="js/selectFx.js"></script>
+        <script>
+            (function() {
+                var rute = {
+                    "1": "<p>Cawang &gt; MT. Haryono &gt; Pancoran &gt; Gatot Subroto &gt; Perempatan Slipi-Palmerah Putar Balik &gt; Ambil arah turun ke Pejompongan &gt; Pejompongan &gt; Penjernihan &gt; Setelah SPBU Pejompongan ada Jalan &gt; Administrasi &gt; Kampus STIA LAN.</p>",
+                    "2": "<p>Cempaka Putih &gt; Letjend. Suprapto &gt; Kramat Bunder &gt; Simpang Senen &gt; Kramat Raya &gt; Salemba Raya &gt; Matraman &gt; Tambak &gt; Manggarai &gt; Sultan Agung &gt; Halimun &gt; Dukuh Atas &gt; Karet Pasar Baru &gt; Penjernihan &gt; Putar Balik &gt; Setelah SPBU Pejompongan ada Jalan &gt; Administrasi &gt; Kampus STIA LAN.</p>",
+                    "3": "<p>Grogol &gt; S. Parman &gt; Slipi &gt;&nbsp;Ambil arah turun ke Pejompongan &gt; Pejompongan &gt; Penjernihan &gt; Setelah SPBU Pejompongan ada Jalan &gt; Administrasi &gt; Kampus STIA LAN.</p>",
+                    "4": "<p>Monas &gt; Medan Merdeka Barat &gt; MH. Thamrin &gt; Bundaran HI &gt; Jenderal Sudirman &gt;&nbsp;Dukuh Atas &gt; Karet Pasar Baru &gt; Penjernihan &gt; Putar Balik &gt;&nbsp;Setelah SPBU Pejompongan ada Jalan &gt; Administrasi &gt; Kampus STIA LAN.</p>",
+                    "101": "<ol><li>Dari Bandara Sukarno-Hatta naik Damri jurusan Terminal Lebak Bulus, turun di JDC.</li><li>Didepan JDC arah turun flyover tunggu dan naik Kopaja 615 Lebak Bulus-Tanah Abang turun di setelah SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>",
+                    "102": "<ol><li>Keluar pelataran timur (Jalan Medan Merdeka Timur) terus masuk halte busway Gambir 1, disitu tunggu dan naik TransJakarta Ekspress jurusan Kalideres turun di halte busway Grogol 1.</li><li>Transfer ke halte Grogol 2 via jembatan busway, disana naik TransJakarta jurusan PGC/Pinang Ranti turun di halte Slipi Petamburan.</li><li>Keluar halte ke arah JDC&nbsp;arah turun flyover tunggu dan naik Kopaja 615 Lebak Bulus-Tanah Abang turun di setelah SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>",
+                    "103": "<ol><li>Dari Stasiun Jatinegara naik KRL jurusan Tanah Abang-Depok-Bogor turun di Stasiun Karet.</li><li>Keluar stasiun Karet ke kolong flyover disitu naik salah satu Kopaja 608 Tanah Abang-Blok M / 615 Tanah Abang-Lebak Bulus / Angkot APB 03 Roxy-Benhil turun seberang SPBU Pejompongan&nbsp;samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>",
+                    "104": "<ol><li>Dari Stasiun Senen nyebrang ke Terminal Senen disitu naik Mayasari Bakti AC62 Senen-Cimone&nbsp;turun di perempatan Slipi-Palmerah (Slipi Kolong/JDC).</li><li>Nyebrang ke JDC arah turun flyover tunggu dan naik Kopaja 615 Lebak Bulus-Tanah Abang turun di setelah SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>",
+                    "105": "<ol><li>Dari Stasiun Tanah Abang naik salah satu Mikrolet 09 Tanah Abang-Kebayoran Lama / 11 Tanah Abang-Meruya turun di JDC.</li><li>Di JDC arah turun flyover tunggu dan naik Kopaja 615 Lebak Bulus-Tanah Abang turun di setelah SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>",
+                    "106": "<ol><li>Dari Terminal Kalideres naik Mayasari Bakti AC02 Kalideres-Kampung Rambutan / AC81 Kalideres-Depok&nbsp;turun di perempatan Slipi-Palmerah (Slipi Kolong/JDC).</li><li>Di JDC arah turun flyover tunggu dan naik Kopaja 615 Lebak Bulus-Tanah Abang turun di setelah SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>",
+                    "107": "<ol><li>Dari Terminal Kampung Rambutan naik Mayasari Bakti AC02 Kampung Rambutan-Kalideres turun di perempatan Slipi-Palmerah (Slipi Kolong/JDC).</li><li>Nyebrang ke JDC arah turun flyover tunggu dan naik Kopaja 615 Lebak Bulus-Tanah Abang turun di setelah SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>",
+                    "108": "<ol><li>Dari Terminal Lebak Bulus naik Kopaja 615 Lebak Bulus-Tanah Abang turun di setelah SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.<br>Kota turun seberang Rukan Permata Senayan.</li></ol>",
+                    "109": "<ol><li>Dari Terminal Pulo Gadung naik APTB 13 Mayasari Bakti Pulo Gadung-Poris Plawad turun di halte busway Slipi Petamburan.</li><li>Keluar halte arah JDC arah turun flyover tunggu dan naik Kopaja 615 Lebak Bulus-Tanah Abang turun di setelah SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>",
+                    "110": "<ol><li>Dari Rawamangun naik PPD AC16 Rawamangun-Lebak Bulus turun di Jembatan halte busway Bendungan Hilir.</li><li>Nyebrang sisi barat, masuk 500 meter ke Jalan Bendungan Hilir nanti naik angkot APB 03 Benhil-Roxy turun di SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>",
+                    "111": "<ol><li>Dari Terminal Tanjung Priok naik Mayasari Bakti AC49 Tanjung Priok-Grogol-Blok M turun di perempatan Slipi-Palmerah (Slipi Kolong/JDC).</li><li>Di JDC arah turun flyover tunggu dan naik Kopaja 615 Lebak Bulus-Tanah Abang turun di setelah SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>",
+                    "112": "<ol><li>Dari Terminal Leuwipanjang Bandung naik bis Bandung-Kalideres (Arimbi, Primajasa) turun di Slipi Jaya.</li><li>Nyebrang ke arah Hotel Menara Peninsula, disitu naik Kopaja 88 turun di puteran kolong flyover Slipi.</li><li>Disitu naik salah satu Kopaja 608 Blok M-Tanah Abang / 615 Lebak Bulus-Tanah Abang turun di setelah SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</span></li></ol>",
+                    "113": "<ol><li>Dari Bekasi naik Mayasari Bakti AC29 Bekasi-Grogol/Kalideres turun di perempatan Slipi-Palmerah (Slipi Kolong/JDC).</li><li>Nyebrang ke JDC arah turun flyover tunggu dan naik Kopaja 615 Lebak Bulus-Tanah Abang turun di setelah SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>",
+                    "114": "<ol><li>Dari Stasiun Bogor/Depok Baru naik KRL jurusan Tanah Abang-Jatinegara turun di Stasiun Karet.</li><li>Keluar stasiun Karet ke kolong flyover disitu naik salah satu Kopaja 608 Tanah Abang-Blok M / 615 Tanah Abang-Lebak Bulus / Angkot APB 03 Roxy-Benhil turun seberang SPBU Pejompongan&nbsp;samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>",
+                    "115": "<ol><li>Dari Cibinong naik APTB 05 Mayasari Bakti Cibinong-Grogol turun di halte busway Slipi Petamburan.</li><li>Keluar halte arah&nbsp;JDC arah turun flyover tunggu dan naik Kopaja 615 Lebak Bulus-Tanah Abang turun di setelah SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>",
+                    "116": "<ol><li>Dari Cikarang naik Mayasari Bakti AC125 Cikarang-Cibitung-Kalideres turun di perempatan Slipi-Palmerah (Slipi Kolong/JDC).</li><li>Nyebrang ke JDC arah turun flyover tunggu dan naik Kopaja 615 Lebak Bulus-Tanah Abang turun di setelah SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>",
+                    "117": "<ol><li>Dari Cileungsi naik Mayasari Bakti AC42A / Maya Raya Cileungsi-Kalideres turun&nbsp;di perempatan Slipi-Palmerah (Slipi Kolong/JDC).</li>Nyebrang ke JDC arah turun flyover tunggu dan naik Kopaja 615 Lebak Bulus-Tanah Abang turun di setelah SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>",
+                    "118": "<ol><li>Dari Ciputat naik Koantasbima 102 Ciputat-Tanah Abang turun di Taman Puring.</li><li>Disitu naik Kopaja 608 Blok M-Tanah Abang turun di setelah SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>",
+                    "119": "<ol><li>Dari Stasiun Serpong naik KRL jurusan Tanah Abang turun di Stasiun Palmerah.</li><li>Keluar sisi barat (arah Kompas Gramedia) disitu nyebrang terus naik Kopaja 608 Blok M-Tanah Abang turun di setelah SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>",
+                    "120": "<ol><li>Dari Tangerang naik salah satu AJAP AC138 Cimone-Blok M / APTB 13 Mayasari Bakti Poris Plawad-Pulo Gadung / Mayasari Bakti AC34 Poris Plawad-Blok M / PPD P45 Cimone-Blok M turun di JDC / Halte Busway Slipi Petamburan.</li><li>JDC arah turun flyover tunggu dan naik Kopaja 615 Lebak Bulus-Tanah Abang turun di setelah SPBU Pejompongan, samping timurnya ada Jalan Administrasi, jalan kaki 500meter masuk setelah Rel nemu Kampus STIA LAN.</li></ol>"
+                }
+                SelectFx.prototype.options.onChange = function (val) {
+                    if (val === "kendaraan-1") {
+                        document.querySelector("#jalur-pribadi").classList.remove("hidden");
+                        document.querySelector("#jalur-umum").classList.add("hidden");
+                    }
+                    else if (val === "kendaraan-2") {
+                        document.querySelector("#jalur-pribadi").classList.add("hidden");
+                        document.querySelector("#jalur-umum").classList.remove("hidden");
+                    }
+                    else {
+                        document.querySelector("#petunjuk-detil").innerHTML = rute[val];
+                    }
+                };
+                
+                [].slice.call( document.querySelectorAll( 'select.cs-select' ) ).forEach( function(el) {
+                    new SelectFx(el);
+                });
+            })();
+        </script>
         <div id="map"></div>
         <script>
             // init map
@@ -21,6 +124,8 @@
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map);
             L.tileLayer('http://census.sparkgeo.com/{z}/{x}/{y}.png').addTo(map);
+            
+            L.AwesomeMarkers.Icon.prototype.options.prefix = 'ion';
             
             var locSpbuPertamina = L.marker([-6.2023846, 106.806344]).addTo(map).bindPopup('<p class="title">SPBU Pertamina</p>' +
                                                                                           '<iframe width="780" height="480" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="loc_spbu_pertamina.html"></iframe>',
@@ -38,7 +143,9 @@
                 locHotelLeMeridien = L.marker([-6.21316, 106.81887]).addTo(map).bindPopup('<p class="title">Hotel Le Meridien</p>' +
                                                                                          '<iframe width="780" height="480" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="loc_hotel_le_meridien.html"></iframe>',
                                                                                           {autopan: true, maxWidth: 800, maxHeight: 520}),
-                locGedungLAN = L.marker([-6.20070, 106.80658]).addTo(map).bindPopup("Gedung Graha Makarti Bhakti Nagari Kampus LAN"),
+                locGedungLAN = L.marker([-6.20070, 106.80658], {
+                    icon: L.AwesomeMarkers.icon({icon: 'location', markerColor: 'red'})
+                }).addTo(map).bindPopup("Gedung Graha Makarti Bhakti Nagari Kampus LAN"),
                 locPam = L.marker([-6.2011606, 106.8127498]).addTo(map).bindPopup("Perusahaan Air Minum (PAM) Perusahaan Daerah"),
                 locTheSultanHotel = L.marker([-6.2181435, 106.809955]).addTo(map).bindPopup('<p class="title">The Sultan Hotel</p>' +
                                                                                            '<iframe width="780" height="480" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="loc_sultan_hotel.html"></iframe>',
